@@ -757,7 +757,7 @@ check_status() {
 main_menu() {
     clear
     echo -e "${PURPLE}===============================================${NC}"
-    echo -e "${PURPLE}            VPS Proxy 一键管理脚本${NC}"
+    echo -e "${PURPLE}            vps nodexy一键管理脚本${NC}"
     echo -e "${PURPLE}     支持: Ubuntu/Debian/CentOS/Alpine${NC}"
     echo -e "${PURPLE}     架构: AMD64/ARM64/IBM s390x${NC}"
     echo -e "${PURPLE}===============================================${NC}"
@@ -765,7 +765,7 @@ main_menu() {
     echo -e "${CYAN}1.${NC} 安装服务"
     echo -e "${CYAN}2.${NC} 卸载服务"
     echo -e "${CYAN}3.${NC} 修改配置"
-    echo -e "${CYAN}4.${NC} 查看节点链接"
+    echo -e "${CYAN}4.${NC} 查看订阅链接"
     echo -e "${CYAN}5.${NC} 查看服务状态"
     echo -e "${CYAN}6.${NC} 查看日志"
     echo -e "${CYAN}0.${NC} 退出"
