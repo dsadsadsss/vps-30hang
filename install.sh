@@ -652,10 +652,11 @@ install() {
     start_service
     
     if is_service_active; then
+        SERVER_IP=$(curl -s ifconfig.me 2>/dev/null || curl -s icanhazip.com 2>/dev/null || echo "YOUR_SERVER_IP")
         echo -e "${GREEN}=== 安装完成 ===${NC}"
         echo -e "${GREEN}服务已启动并设置为开机自启${NC}"
-        echo -e "${CYAN}访问地址: http://YOUR_SERVER_IP:$PORT${NC}"
-        echo -e "${CYAN}节点链接: http://YOUR_SERVER_IP:$PORT/$UUID${NC}"
+        echo -e "${CYAN}访问地址: http://$SERVER_IP:$PORT${NC}"
+        echo -e "${CYAN}节点链接: http://$SERVER_IP:$PORT/$UUID${NC}"
     else
         echo -e "${RED}服务启动失败，请检查日志${NC}"
         show_service_logs
