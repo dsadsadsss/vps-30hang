@@ -1,3 +1,35 @@
+#!/bin/bash
+
+# 颜色定义
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
+CYAN='\033[0;36m'
+NC='\033[0m' # No Color
+
+# 全局变量
+SERVICE_NAME="vps-proxy"
+INSTALL_DIR="/opt/vps-proxy"
+CONFIG_FILE="$INSTALL_DIR/.env"
+SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME.service"
+OPENRC_FILE="/etc/init.d/$SERVICE_NAME"
+SCRIPT_FILE="$INSTALL_DIR/index.js"
+
+# 检测初始化系统
+detect_init_system() {
+    if command -v systemctl >/dev/null 2>&1 && systemctl --version >/dev/null 2>&1; then
+        echo "systemd"
+    elif command -v rc-service >/dev/null 2>&1; then
+        echo "openrc"
+    elif command -v service >/dev/null 2>&1; then
+        echo "sysv"
+    else
+        echo "unknown"
+    fi
+}
+
 # 服务管理函数
 start_service() {
     local init_system=$(detect_init_system)
@@ -109,36 +141,6 @@ show_service_status() {
             echo -e "${YELLOW}无法显示状态：未知的初始化系统${NC}"
             ;;
     esac
-}#!/bin/bash
-
-# 颜色定义
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-PURPLE='\033[0;35m'
-CYAN='\033[0;36m'
-NC='\033[0m' # No Color
-
-# 全局变量
-SERVICE_NAME="vps-proxy"
-INSTALL_DIR="/opt/vps-proxy"
-CONFIG_FILE="$INSTALL_DIR/.env"
-SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME.service"
-OPENRC_FILE="/etc/init.d/$SERVICE_NAME"
-SCRIPT_FILE="$INSTALL_DIR/index.js"
-
-# 检测初始化系统
-detect_init_system() {
-    if command -v systemctl >/dev/null 2>&1 && systemctl --version >/dev/null 2>&1; then
-        echo "systemd"
-    elif command -v rc-service >/dev/null 2>&1; then
-        echo "openrc"
-    elif command -v service >/dev/null 2>&1; then
-        echo "sysv"
-    else
-        echo "unknown"
-    fi
 }
 
 # 检测系统类型
@@ -548,25 +550,6 @@ EOF
     chmod 600 "$CONFIG_FILE"
 }
 
-# 创建systemd服务
-create_service() {
-    local init_system=$(detect_init_system)
-    echo -e "${BLUE}创建系统服务 ($init_system)...${NC}"
-    
-    case $init_system in
-        "systemd")
-            create_systemd_service
-            ;;
-        "openrc")
-            create_openrc_service
-            ;;
-        *)
-            echo -e "${YELLOW}未检测到支持的初始化系统，请手动配置服务${NC}"
-            return 1
-            ;;
-    esac
-}
-
 # 创建systemd服务文件
 create_systemd_service() {
     cat > "$SERVICE_FILE" << EOF
@@ -625,6 +608,25 @@ EOF
 
     chmod +x "$OPENRC_FILE"
     rc-update add "$SERVICE_NAME" default
+}
+
+# 创建服务
+create_service() {
+    local init_system=$(detect_init_system)
+    echo -e "${BLUE}创建系统服务 ($init_system)...${NC}"
+    
+    case $init_system in
+        "systemd")
+            create_systemd_service
+            ;;
+        "openrc")
+            create_openrc_service
+            ;;
+        *)
+            echo -e "${YELLOW}未检测到支持的初始化系统，请手动配置服务${NC}"
+            return 1
+            ;;
+    esac
 }
 
 # 安装函数
@@ -823,4 +825,4 @@ main() {
 }
 
 # 运行主程序
-main "$@"
+main "$@"e
