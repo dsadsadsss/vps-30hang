@@ -305,7 +305,7 @@ const 超级服务器 = http.createServer((req, res) => {
       }
       
       const 无加密选项 = '?encryption=none&security=none&host=';
-      const 原始域名 = req.headers.host; // host参数使用原始域名（不带端口）
+      const 原始域名 = req.headers.host.split(':')[0]; // host参数使用原始域名（不带端口）
       订阅链接 = 协议前缀 + 美好的一天 + '@' + 当前服务器 + 无加密选项 + 原始域名 + '&type=ws&path=%2F#' + 名字不错;
     }
     
