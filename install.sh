@@ -528,7 +528,7 @@ get_user_input() {
         read -p "请输入NKEY: " NKEY
     fi
     
-    read -p "请输入套了cf的域名 (可选): " DOMAIN
+    read -p "请输入DOMAIN (可选): " DOMAIN
 }
 
 # 创建配置文件
